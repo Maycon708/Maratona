@@ -1,0 +1,119 @@
+#include <bits/stdc++.h>
+
+#define INF 0x3F3F3F3F
+#define rep(i, a, b) for (int i = int(a); i < int(b); i++)
+#define pb push_back
+#define pi 3.1415926535897932384626433832795028841971
+#define debug(x) cout << #x << " = " << x << endl;
+#define debug2(x,y) cout << #x << " = " << x << " --- " << #y << " " << y << "\n";
+#define debugM( x, l, c ) { rep( i, 0, l ){ rep( j, 0, c ) printf("%d ", x[i][j]); printf("\n");}}
+#define all(S) (S).begin(), (S).end()
+#define MAXV 1010000
+#define MAXN 110
+#define F first
+#define S second
+#define EPS 1e-9
+#define mk make_pair
+
+// 
+
+using namespace std;
+
+typedef pair <int, int> ii;
+typedef long long int ll;
+
+ll readInt();
+
+int x, y, p, l[1111][1111], r[1111][1111], mat[1111][1111], mm;
+
+int solve_l(){
+	int cont = 0;
+	for( int j = mm; j >= y; j-- ){
+		bool aux = 0;
+		for( int i = x; i >= 0; i-- ){
+			if( !mat[i][j] ) aux = 1; 		
+			if( aux ){
+				l[i][j] += l[i][j+1];
+				continue;
+			} 		
+			l[i][j] = 0;
+			cont++;
+			cont += l[i][j+1];
+		}
+//		debug( cont )
+	}
+	return cont-1;
+}
+
+
+int solve_r(){
+	int cont = 0;
+	for( int j = mm; j >= y; j-- ){
+		bool aux = 0;
+		for( int i = x; i < p; i++ ){
+			if( !mat[i][j] ) aux = 1; 		
+			if( aux ){
+				r[i][j] += r[i][j+1];
+				continue;
+			}
+			r[i][j] = 0;
+			cont++;
+			cont += r[i][j+1];
+		}
+//		debug( cont )
+	}
+	return cont-1;
+}
+
+int main(){
+//freopen("in.txt", "r", stdin);
+
+
+	while( 1 ){
+		int n = readInt();
+		p = readInt();
+		if( !n && !p ) break;
+		mm = 0;
+		rep( i, 0, 1111)
+			rep( j, 0, 1111)
+				l[i][j] = r[i][j] = mat[i][j] = 0;
+
+		rep( i, 0, p ){
+			int m = readInt();
+			mm = max( m, mm );
+			rep( j, 0, m ){
+				int k = readInt();
+				l[i][j] = 1;
+				r[i][j] = 1;
+				mat[i][j] = 1;
+				if( k == 1 ) x = i, y = j;
+			}
+		}
+//		debug2( solve_l(), solve_r())
+		printf("%d\n", min( solve_l(), solve_r() ) );
+	}
+
+}
+
+ll readInt () {
+    bool minus = false;
+    ll result = 0; char ch;
+
+    ch = getchar();
+    while (true) {
+        if (ch == '-')
+            break;
+        if (ch >= '0' && ch <= '9') break;
+        ch = getchar();
+    }
+    if (ch == '-')  minus = true;
+    else result = ch-'0';
+    while (true) {
+        ch = getchar();
+        if (ch < '0' || ch > '9') break;
+        result = result*10 + (ch-'0');
+    }
+    if (minus) return -result;
+    else return result;
+}
+
